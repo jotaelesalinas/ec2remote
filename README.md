@@ -105,7 +105,7 @@ The instance will be stopped, unless it is already stopped.
 
 If the instance is stopping, it will just wait until it is fully stopped.
 
-If the instance is starting, only if the argument -f (force) is present, it will wait until it is fully started and then it will bring it down again.
+If the instance is starting, only if the argument `-f` (force) is present, it will wait until it is fully started and then it will bring it down again.
 
 ## Notes
 
