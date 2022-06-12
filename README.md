@@ -90,7 +90,7 @@ aws ec2 describe-instances --instance-id <instance id> | jq
 ## Starting an instance
 
 ```bash
-./ec2control.sh -i <instance id> -u
+./ec2control.sh -i <instance id> -s
 ```
 
 The instance will be started, unless it is already started.
