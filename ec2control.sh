@@ -11,11 +11,11 @@ STATUS_CODE_PENDING=0
 STATUS_CODE_RUNNING=16
 
 function usage () {
-    __USAGE="Usage: $(basename $0) -i <instance id> [ -u | -d [-f] ]
+    __USAGE="Usage: $(basename $0) -i <instance id> [ -s | -d [-f] ]
 
 Options:
     -i <instance id>: Id of the EC2 instance
-    -u: Starts up the instance
+    -s: Starts the instance
     -d: Shuts down the instance
     -f: Forces shutdown when instance is starting
 "
@@ -192,7 +192,7 @@ ACTION_DOWN=0
 FORCE_SHUTDOWN=0
 SHOW_PUBLIC_IP=0
 
-while getopts ":i:udf" VARNAME; do
+while getopts ":i:sdf" VARNAME; do
     case $VARNAME in
         i)
             INSTANCE_ID="$OPTARG"

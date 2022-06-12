@@ -115,3 +115,15 @@ If the instance is starting, only if the argument `-f` (force) is present, it wi
 ## Notes
 
 This tool will not work with instances that are terminated or in the process of being terminated.
+
+## Mnemotechnics for the options
+
+- `i`: **I**nstance id
+- `s`: **S**tart instance
+- `d`: shut **D**own instance
+- `f`: **F**orce shutdown
+- `k`: ssh **K**ey file
+- `u`: **U**sername
+- `t`: **T**imeout
+- `p`: **P**rivate ip address
+

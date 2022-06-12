@@ -143,7 +143,7 @@ fi
 # 3. get ip address
 ############################################################################
 
-$EC2CONTROL -i $INSTANCE_ID -u
+$EC2CONTROL -i $INSTANCE_ID -s
 RETCODE=$?
 
 if [ $RETCODE -ne 0 ]; then
@@ -165,15 +165,15 @@ IP_ADDRESS=${ARR[3]}
 
 echo ""
 echo "Connecting..."
-echo "- IP address:    $IP_ADDRESS"
-echo "- User:          $USERNAME"
-echo "- PEM file:      $PEM_FILE"
+echo "> IP address:    $IP_ADDRESS"
+echo "> User:          $USERNAME"
+echo "> PEM file:      $PEM_FILE"
 if [ $# -gt 0 ]; then
-    echo "- Command:       $*"
+    echo "> Command:       $*"
     if [ $TIMEOUT -gt 0 ]; then
-        echo "- Timeout:       $TIMEOUT s"
+        echo "> Timeout:       $TIMEOUT s"
     else
-        echo "- Timeout:       off"
+        echo "> Timeout:       off"
     fi
 fi
 echo ""
