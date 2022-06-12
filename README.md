@@ -45,7 +45,7 @@ Save the PEM file in the `ec2remote` folder. Don't change the name.
 Options: `[-k <pem file>] [-u <username>] [-d [-f]] [-p]`
 
 Where:
-- `-i <instance id>`: Your EC2 instance ID.
+- `-i <instance id>`: Your EC2 instance ID. Not the image ID.
 - `-k <pem file>`: The keypair file. Default: the script will search for a file named `ec2-<instance id>*.pem` in the working directory.
 - `-u <username>`: Username of remote host. Default: `ubuntu`.
 - `-d`: Shut down instance after the session is closed.
