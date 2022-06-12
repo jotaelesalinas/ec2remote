@@ -11,6 +11,7 @@ PEM_FILE=
 USE_PRIVATE_IP=0
 SHUTDOWN=0
 FORCE_SHUTDOWN=0
+TIMEOUT=0
 
 function error () {
     echo "" >&2
@@ -21,6 +22,7 @@ function error () {
 # do not modify!
 # https://www.cyberciti.biz/faq/what-are-the-exit-statuses-of-ssh-command/
 SSH_CONN_REFUSED=255
+SSH_CONN_TIMEDOUT=124
 
 ############################################################################
 # usage and read arguments
@@ -36,6 +38,7 @@ Options:
     -k <pem file>: Location of the PEM file with the SSH key. Default:
         ec2-<instance id>*.pem in the working directory.
     -u <username>: Username of remote host. Default: $DEFAULT_USERNAME.
+    -t <seconds>: Establishes a timeout for the remote command. Default: off.
     -d: Shut down instance after the session is closed.
     -f: Force shutdown even if the SSH connection fails.
     -p: Switch to use private IP address instead of public.
@@ -75,7 +78,7 @@ Options:
     exit 1;
 }
 
-while getopts ":i:k:u:dfp" VARNAME; do
+while getopts ":i:k:u:t:dfp" VARNAME; do
     case $VARNAME in
         i)
             INSTANCE_ID="$OPTARG"
@@ -85,6 +88,9 @@ while getopts ":i:k:u:dfp" VARNAME; do
             ;;
         u)
             USERNAME="$OPTARG"
+            ;;
+        t)
+            TIMEOUT=$((OPTARG+0))
             ;;
         d)
             SHUTDOWN=1
@@ -159,13 +165,25 @@ IP_ADDRESS=${ARR[3]}
 
 echo ""
 echo "Connecting..."
-echo "- IP address: $IP_ADDRESS"
-echo "- User:       $USERNAME"
-echo "- PEM file:   $PEM_FILE"
-echo "- Arguments:  $*"
+echo "- IP address:    $IP_ADDRESS"
+echo "- User:          $USERNAME"
+echo "- PEM file:      $PEM_FILE"
+if [ $# -gt 0 ]; then
+    echo "- Command:       $*"
+    if [ $TIMEOUT -gt 0 ]; then
+        echo "- Timeout:       $TIMEOUT s"
+    else
+        echo "- Timeout:       off"
+    fi
+fi
 echo ""
 
-ssh -i $PEM_FILE -o StrictHostKeyChecking=no $USERNAME@$IP_ADDRESS $*
+if [ $# -gt 0 ] && [ $TIMEOUT -gt 0 ]; then
+    timeout --kill-after=3 $TIMEOUT \
+        ssh -i $PEM_FILE -o StrictHostKeyChecking=no $USERNAME@$IP_ADDRESS $*
+else
+    ssh -i $PEM_FILE -o StrictHostKeyChecking=no $USERNAME@$IP_ADDRESS $*
+fi
 
 RETCODE=$?
 if [ $RETCODE -eq $SSH_CONN_REFUSED ]; then
@@ -174,10 +192,16 @@ if [ $RETCODE -eq $SSH_CONN_REFUSED ]; then
         $EC2CONTROL -i $INSTANCE_ID -d
     fi
     error "SSH connection failed ($RETCODE)." $RETCODE
+elif [ $RETCODE -eq $SSH_CONN_TIMEDOUT ]; then
+    if [ $SHUTDOWN -eq 1 ] && [ $FORCE_SHUTDOWN -eq 1 ]; then
+        echo "Forcing shutdown."
+        $EC2CONTROL -i $INSTANCE_ID -d
+    fi
+    error "Remote command timed out ($RETCODE)." $RETCODE
 fi
 
 echo ""
-echo "Done! Return code: " $RETCODE
+echo "SSH session closed. Return code: " $RETCODE
 
 if [ $SHUTDOWN -eq 1 ]; then
     echo "Shutting down."

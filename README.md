@@ -45,6 +45,7 @@ Save the PEM file in the `ec2remote` folder. Don't change the name.
 Options: `[-k <pem file>] [-u <username>] [-d [-f]] [-p]`
 
 Where:
+
 - `-i <instance id>`: Your EC2 instance ID. Not the image ID.
 - `-k <pem file>`: The keypair file. Default: the script will search for a file named `ec2-<instance id>*.pem` in the working directory.
 - `-u <username>`: Username of remote host. Default: `ubuntu`.
@@ -64,11 +65,15 @@ If the SSH session fails to start, for any reason, the instance will not be stop
 ./ec2ssh.sh -i <instance id> <options> <command> [...<arguments>]
 ```
 
-The options are the same than for the SSH interactive session.
+The options are the same than for the SSH interactive session plus:
+
+- `-t <seconds>`: Establishes a timeout for the remote command. Default: off.
 
 Now, instead of opening an interactive session, the script will run a command and wait until its completion.
 
-Important! If the remote command gets stuck for any reason, the session will remain open. It is recommended to wrap `ec2ssh.sh` with a command like `timeout` to establish a time limit and avoid surprises in the invoice.
+The session will be cut if `-t` is used and the remote command has not finished after the specified number of seconds.
+
+After a timeout, the instance will be stopped only if both `-d` and `-f` options are present.
 
 ## Show the status of an instance
 

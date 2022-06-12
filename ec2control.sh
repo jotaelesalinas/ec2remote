@@ -144,11 +144,11 @@ function show_status () {
         #echo "> Threads/core:  $THREADS"
         echo "==========================================================================="
     else
-        echo "> State:        $STATUS_STATE_CODE ($STATUS_STATE_NAME)"
-        echo "> Public IP:    $STATUS_PUBLIC_IP"
-        echo "> Public host:  $STATUS_PUBLIC_HOSTNAME"
-        echo "> Private IP:   $STATUS_PRIVATE_IP"
-        echo "> Private host: $STATUS_PRIVATE_HOSTNAME"
+        echo "> State:         $STATUS_STATE_CODE ($STATUS_STATE_NAME)"
+        echo "> Public IP:     $STATUS_PUBLIC_IP"
+        echo "> Public host:   $STATUS_PUBLIC_HOSTNAME"
+        echo "> Private IP:    $STATUS_PRIVATE_IP"
+        echo "> Private host:  $STATUS_PRIVATE_HOSTNAME"
     fi
 
 
