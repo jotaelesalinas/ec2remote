@@ -198,7 +198,7 @@ while getopts ":i:sdf" VARNAME; do
             INSTANCE_ID="$OPTARG"
             ((NUM_OPTS=NUM_OPTS+1))
             ;;
-        u)
+        s)
             ACTION_UP=1
             ((NUM_OPTS=NUM_OPTS+1))
             ;;
@@ -286,7 +286,7 @@ elif [ $ACTION == "up" ]; then
         up $INSTANCE_ID
         wait_status $INSTANCE_ID $STATUS_CODE_RUNNING
     elif [ $STATUS -eq $STATUS_CODE_STOPPING ]; then
-        echo "Instance is starting up. Forcing startup."
+        echo "Instance is shutting down. Forcing startup."
         echo "Waiting for instance to finish stop..."
         wait_status $INSTANCE_ID $STATUS_CODE_STOPPED
         echo "Now it's stopped."
