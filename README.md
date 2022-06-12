@@ -78,9 +78,9 @@ Important! If the remote command gets stuck for any reason, the session will rem
 
 This command will show just the bare minimum information needed to run remote commands in your EC2 instance. If you want to retrieve the complete information, run:
 
-´´´bash
+```bash
 aws ec2 describe-instances --instance-id <instance id> | jq
-´´´
+```
 
 ## Starting an instance
 
