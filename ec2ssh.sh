@@ -4,6 +4,7 @@ set -u
 EC2CONTROL=./ec2control.sh
 
 DEFAULT_USERNAME="ubuntu"
+DEFAULT_WAIT_SECONDS=10
 
 INSTANCE_ID=
 USERNAME=$DEFAULT_USERNAME
@@ -12,6 +13,7 @@ USE_PRIVATE_IP=0
 SHUTDOWN=0
 FORCE_SHUTDOWN=0
 TIMEOUT=0
+WAIT_SECONDS=$DEFAULT_WAIT_SECONDS
 
 function error () {
     echo "" >&2
@@ -39,6 +41,7 @@ Options:
         ec2-<instance id>*.pem in the working directory.
     -u <username>: Username of remote host. Default: $DEFAULT_USERNAME.
     -t <seconds>: Establishes a timeout for the remote command. Default: off.
+    -w <seconds>: Waits x seconds before connecting. Default: $DEFAULT_WAIT_SECONDS.
     -d: Shut down instance after the session is closed.
     -f: Force shutdown even if the SSH connection fails.
     -p: Switch to use private IP address instead of public.
@@ -78,7 +81,7 @@ Options:
     exit 1;
 }
 
-while getopts ":i:k:u:t:dfp" VARNAME; do
+while getopts ":i:k:u:t:w:dfp" VARNAME; do
     case $VARNAME in
         i)
             INSTANCE_ID="$OPTARG"
@@ -91,6 +94,9 @@ while getopts ":i:k:u:t:dfp" VARNAME; do
             ;;
         t)
             TIMEOUT=$((OPTARG+0))
+            ;;
+        w)
+            WAIT_SECONDS=$((OPTARG+0))
             ;;
         d)
             SHUTDOWN=1
@@ -162,6 +168,12 @@ IP_ADDRESS=${ARR[3]}
 ############################################################################
 # 4. connect
 ############################################################################
+
+if [ $WAIT_SECONDS -gt 0 ]; then
+    echo ""
+    echo "Waiting $WAIT_SECONDS seconds..."
+    sleep $WAIT_SECONDS
+fi
 
 echo ""
 echo "Connecting..."
