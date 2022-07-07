@@ -136,7 +136,7 @@ This tool will not work with instances that are terminated or in the process of 
 Command to list all files and shutdown:
 
 ```
-./ec2ssh.sh -i i-01234567890123456 ls -laFh && ./ec2control.sh -i i-01234567890123456 -d -f
+./ec2ssh.sh -i i-01234567890123456 -d -f ls -laFh
 ```
 
 Output:
@@ -171,9 +171,10 @@ drwxr-xr-x  3 root   root   4.0K Apr  1  2020 ../
 -rw-------  1 ubuntu ubuntu  22K Jul  4 18:51 .bash_history
 -rw-r--r--  1 ubuntu ubuntu  220 Apr  4  2018 .bash_logout
 -rw-r--r--  1 ubuntu ubuntu 3.7K Apr  4  2018 .bashrc
-[... more files ...]
+[...more files...]
 
 SSH session closed. Return code:  0
+Shutting down.
 ===========================================================================
 > Instance ID:   i-01234567890123456
 > Key name:      my-ec2-instance
