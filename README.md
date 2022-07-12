@@ -1,6 +1,6 @@
 # ec2remote
 
-Save money running commands in EC2 instances and stopping them on completion.
+Save money running commands in EC2 instances and stopping them on completion. From the command line.
 
 As easy as:
 
